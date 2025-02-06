@@ -55,12 +55,5 @@ program
         console.log(`Successfully saved at ${newExpense.id}`);
     });
 
-    program
-        .command("delete")
-        .description("Delete an expense by ID")
-        
-
-
-
 
     program.parse(process.argv);

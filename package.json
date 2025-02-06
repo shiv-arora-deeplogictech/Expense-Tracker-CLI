@@ -6,7 +6,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "bin":{
-    "extracker":"./extracker.js"
+    "extracker":"./expense-tracker.js"
   },
   "devDependencies": {},
   "scripts": {
