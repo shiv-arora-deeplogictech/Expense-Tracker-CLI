@@ -30,5 +30,37 @@ function getNextId(expenses){
     return Math.max(...expenses.map(exp=>exp.id))+1;
 }
 
+program
+    .command("add")
+    .description("Adding a new expense")
+    .requiredOption('--description <description>','Expense description')
+    .requiredOption('--amount <amount>', 'Expense amount',parseFloat)
+    .action((options)=>{
+        const expenses = loadExpenses();
+
+        if(options.amount<0){
+            console.error("Amount must be positive.");
+            process.exit(1);
+        }
+
+        const newExpense = {
+            id:getNextId(expenses),
+            data: new Date().toISOString().split('T')[0],
+            description: options.description,
+            amount: options.amount,
+        };
+
+        expenses.push(newExpense);
+        saveExpenses(expenses);
+        console.log(`Successfully saved at ${newExpense.id}`);
+    });
+
+    program
+        .command("delete")
+        .description("Delete an expense by ID")
+        
 
 
+
+
+    program.parse(process.argv);
