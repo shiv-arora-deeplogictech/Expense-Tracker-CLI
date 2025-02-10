@@ -2,7 +2,7 @@
 
 const fs = require("fs");
 const path = require("path");
-const { Command } = require("commander");
+const { Command, action, option } = require("commander");
 const program = new Command();
 
 program.name("extracker")
@@ -11,16 +11,25 @@ program.name("extracker")
 
 const DATA_FILE = path.join(__dirname,'expenses.json');
 
-function loadExpenses(){
-    if(!fs.existsSync(DATA_FILE)){
+function loadExpenses() {
+    if (!fs.existsSync(DATA_FILE)) {
+        console.log("🚨 File does not exist. Returning empty array.");
         return [];
     }
-    try{
-        return JSON.parse(fs.readFileSync(DATA_FILE,'utf-8'));
-    } catch(err){
+    try {
+        const data = fs.readFileSync(DATA_FILE, 'utf-8');
+        const parsedData = JSON.parse(data);
+        if (!Array.isArray(parsedData)) {
+            console.error("🚨 Data is not an array. Resetting file.");
+            return [];
+        }
+        return parsedData;
+    } catch (err) {
+        console.error("🚨 Error loading expenses:", err);
         return [];
     }
 }
+
 function saveExpenses(expenses){
     fs.writeFileSync(DATA_FILE,JSON.stringify(expenses,null,2));
 }
@@ -85,4 +94,45 @@ program
             }
         });
 
+        program
+    .command("update")
+    .description("Update the expenses")
+    .requiredOption("--id <id>", "Expense ID", parseInt)
+    .option("--description <description>", "New Description")
+    .option("--amount <amount>", "New Amount", parseFloat)
+    .action((options) => {
+        let expenses = loadExpenses();
+
+        
+
+        if (!Array.isArray(expenses)) {
+            console.error("Error: expenses is not an array!");
+            return;
+        }
+
+        let expense = expenses.find(exp => exp.id === options.id);
+
+        if (!expense) {
+            console.error(` No expense with ID ${options.id} found`);
+            return;
+        }
+
+        if (options.description) {
+            expense.description = options.description;
+        }
+        if (options.amount) {
+            if (options.amount < 0) {
+                console.log("❌ Enter a positive amount");
+                return;
+            } else {
+                expense.amount = options.amount;
+            }
+        }
+
+        saveExpenses(expenses);
+        console.log(`The expense with ID ${options.id} was updated`);
+    });
+
+    
+   
     program.parse(process.argv);
