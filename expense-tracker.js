@@ -133,6 +133,14 @@ program
         console.log(`The expense with ID ${options.id} was updated`);
     });
 
+        program
+        .command("clear")
+        .description("Deleted all the expenses")
+        .action(()=>{
+            saveExpenses([]);
+            console.log("All the expenses are deleted successfully");
+        })
+
     
    
     program.parse(process.argv);
