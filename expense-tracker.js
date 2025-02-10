@@ -72,5 +72,17 @@ program
         saveExpenses(expenses);
     });
 
+    program
+    .command("view")
+        .description("Show all the expenses")
+        .action(()=>{
+            let expenses = loadExpenses();
+
+            if(expenses.length===0){
+                console.error("No expenses found");
+            } else {
+                console.table(expenses);
+            }
+        });
 
     program.parse(process.argv);
