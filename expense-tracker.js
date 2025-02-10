@@ -55,5 +55,22 @@ program
         console.log(`Successfully saved at ${newExpense.id}`);
     });
 
+    program.command("remove")
+    .description("Removing all the expenses")
+    .requiredOption("--id <id>","Expense ID",parseInt)
+    .action((options)=>{ 
+        let expenses= loadExpenses();
+        const length = expenses.length;
+
+        expenses = expenses.filter(exp => exp.id !== options.id);
+
+        if(expenses.length === length){
+            console.error(`Expense with ID : ${options.id} not found`);
+        } else {
+            console.log(`Expense with ID ${options.id} deleted successfully`);
+        }
+        saveExpenses(expenses);
+    });
+
 
     program.parse(process.argv);

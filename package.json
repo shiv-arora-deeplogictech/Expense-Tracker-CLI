@@ -1,14 +1,13 @@
 {
   "dependencies": {
-    "commander": "^13.1.0"
+    "commander": "^7.2.0"
   },
   "name": "expense-tracker-cli",
   "version": "1.0.0",
   "main": "index.js",
-  "bin":{
-    "extracker":"./expense-tracker.js"
+  "bin": {
+    "extracker": "./expense-tracker.js"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
