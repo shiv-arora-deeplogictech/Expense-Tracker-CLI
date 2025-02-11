@@ -139,7 +139,24 @@ program
         .action(()=>{
             saveExpenses([]);
             console.log("All the expenses are deleted successfully");
-        })
+        });
+
+        program
+        .command("summary")
+        .description("Summary of all the expenses")
+        .action(()=>{
+            const expenses = loadExpenses();
+
+            let totalExpense=0;
+            if(expenses.length===0){
+                console.log("No Expenses found !");
+            } else {
+            for(let exp of expenses){
+                totalExpense+= exp.amount;
+            }
+            console.log(`The total expenses are ${totalExpense}`);
+        }
+        });
 
     
    
